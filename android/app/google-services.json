@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "557530803918",
+    "project_id": "grape-6ec92",
+    "storage_bucket": "grape-6ec92.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:557530803918:android:38d28fbffb71c5d7f0ea9f",
+        "android_client_info": {
+          "package_name": "com.example.ampiy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4jenIDyBIfPxv4lRxJlJyLtN0dPpv2L4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:557530803918:android:3636f301f895fe9bf0ea9f",
+        "android_client_info": {
+          "package_name": "com.example.grape"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4jenIDyBIfPxv4lRxJlJyLtN0dPpv2L4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -250,6 +250,16 @@ class _MedicineReminderViewState extends State<MedicineReminderView> {
       create: (_) => MedicineReminderBloc(),
       child: Scaffold(
         backgroundColor: AppColors.background,
+        appBar: AppBar(
+          // title: const Text("Set Medicine Reminder"),
+          backgroundColor: AppColors.background,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context); // Go back to the previous screen
+            },
+          ),
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -257,7 +267,7 @@ class _MedicineReminderViewState extends State<MedicineReminderView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 50),
+                  // const SizedBox(height: 50),
                   Text(
                     "Set a Medicine Reminder",
                     style: TextStyle(
@@ -321,7 +331,9 @@ class _MedicineReminderViewState extends State<MedicineReminderView> {
                               labelText: "Frequency",
                               hintText: _frequency,
                               suffixIcon: IconButton(
-                                icon: const Icon(Icons.edit),
+                                icon: const Icon(
+                                  Icons.edit_attributes_outlined,
+                                ),
                                 onPressed:
                                     _showFrequencyPopup, // Show frequency popup
                               ),

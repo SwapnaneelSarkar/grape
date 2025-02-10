@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../../color_constant/color_constant.dart';
 
 class ViewRemindersPage extends StatelessWidget {
   const ViewRemindersPage({Key? key}) : super(key: key);
@@ -18,17 +19,17 @@ class ViewRemindersPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("My Reminders")),
+      appBar: AppBar(
+        title: const Text("My Reminders"),
+        backgroundColor: AppColors.primary, // Color from the color constants
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream:
             FirebaseFirestore.instance
                 .collection('meds_reminder')
                 .doc(userId)
                 .collection('reminders')
-                .orderBy(
-                  'createdAt',
-                  descending: true,
-                ) // Order reminders by creation time
+                .orderBy('createdAt', descending: true)
                 .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,11 +54,16 @@ class ViewRemindersPage extends StatelessWidget {
               final time =
                   (reminder['time'] as Timestamp)
                       .toDate(); // Assuming 'time' is a Timestamp
-              final formattedTime =
-                  "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+
+              // Format time with AM/PM
+              final formattedTime = _formatTime(time);
+
               final isActive =
                   reminder['is_active'] ??
                   true; // Default to true if 'is_active' is missing
+              final frequency =
+                  reminder['frequency'] ??
+                  'Custom'; // Get frequency (Daily or Custom)
 
               return Dismissible(
                 key: Key(reminderId),
@@ -81,20 +87,58 @@ class ViewRemindersPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                child: ListTile(
-                  title: Text(medicineName),
-                  subtitle: Text("Time: $formattedTime"),
-                  trailing: Switch(
-                    value: isActive,
-                    onChanged: (bool value) {
-                      // Toggle the reminder's active status
-                      FirebaseFirestore.instance
-                          .collection('meds_reminder')
-                          .doc(userId)
-                          .collection('reminders')
-                          .doc(reminderId)
-                          .update({'is_active': value});
-                    },
+                child: Card(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 15,
+                  ),
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(10),
+                    title: Text(
+                      medicineName,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Time: $formattedTime",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        Text(
+                          "Frequency: $frequency", // Display frequency
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: Switch(
+                      value: isActive,
+                      onChanged: (bool value) {
+                        // Toggle the reminder's active status
+                        FirebaseFirestore.instance
+                            .collection('meds_reminder')
+                            .doc(userId)
+                            .collection('reminders')
+                            .doc(reminderId)
+                            .update({'is_active': value});
+                      },
+                      activeColor:
+                          AppColors.primary, // Use color from the constants
+                    ),
                   ),
                 ),
               );
@@ -102,9 +146,20 @@ class ViewRemindersPage extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            '/reminder',
+          ); // Navigate to Add Reminder page
+        },
+        backgroundColor: AppColors.primary, // Use color from the constants
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 
+  // Method to check time for reminders
   void _checkTimeForReminders(List<QueryDocumentSnapshot> reminders) async {
     final currentTime = DateTime.now();
 
@@ -126,6 +181,7 @@ class ViewRemindersPage extends StatelessWidget {
     }
   }
 
+  // Method to show a local notification
   Future<void> _showNotification(String medicineName, Timestamp time) async {
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
@@ -146,5 +202,12 @@ class ViewRemindersPage extends StatelessWidget {
       platform,
       payload: 'item x',
     );
+  }
+
+  // Method to format the time with AM/PM
+  String _formatTime(DateTime time) {
+    final hour = time.hour > 12 ? time.hour - 12 : time.hour;
+    final period = time.hour >= 12 ? 'PM' : 'AM';
+    return "${hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} $period";
   }
 }

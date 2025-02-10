@@ -18,7 +18,7 @@ class MedicineReminderBloc
         final userId = _auth.currentUser?.uid;
 
         if (userId != null) {
-          // Add the reminder to Firestore with 'is_active' defaulting to true
+          // Add the reminder to Firestore with 'is_active' defaulting to true and frequency
           await _firestore
               .collection('meds_reminder')
               .doc(userId)
@@ -28,6 +28,9 @@ class MedicineReminderBloc
                 'time': event.time, // Store DateTime or Timestamp directly
                 'createdAt': FieldValue.serverTimestamp(),
                 'is_active': true, // Default value for 'is_active' is true
+                'frequency':
+                    event
+                        .frequency, // Store frequency (could be 'Daily' or a list of selected days)
               });
 
           emit(MedicineReminderSuccess());

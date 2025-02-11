@@ -13,138 +13,165 @@ class ViewRemindersPage extends StatelessWidget {
 
     if (userId == null) {
       return Scaffold(
-        appBar: AppBar(title: const Text("Reminders")),
         body: const Center(child: Text("User not authenticated")),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("My Reminders"),
-        backgroundColor: AppColors.primary, // Color from the color constants
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream:
-            FirebaseFirestore.instance
-                .collection('meds_reminder')
-                .doc(userId)
-                .collection('reminders')
-                .orderBy('createdAt', descending: true)
-                .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          // Directly writing the text without container
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 35,
+            ), // Adjusting the padding to control the distance
+            child: Text(
+              "My Reminders",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
 
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text("No reminders set yet."));
-          }
-
-          final reminders = snapshot.data!.docs;
-
-          // Start a background task to check the time
-          _checkTimeForReminders(reminders);
-
-          return ListView.builder(
-            itemCount: reminders.length,
-            itemBuilder: (context, index) {
-              final reminder = reminders[index];
-              final reminderId = reminder.id;
-              final medicineName = reminder['medicineName'] ?? 'Unknown';
-              final time =
-                  (reminder['time'] as Timestamp)
-                      .toDate(); // Assuming 'time' is a Timestamp
-
-              // Format time with AM/PM
-              final formattedTime = _formatTime(time);
-
-              final isActive =
-                  reminder['is_active'] ??
-                  true; // Default to true if 'is_active' is missing
-              final frequency =
-                  reminder['frequency'] ??
-                  'Custom'; // Get frequency (Daily or Custom)
-
-              return Dismissible(
-                key: Key(reminderId),
-                direction: DismissDirection.endToStart,
-                onDismissed: (direction) {
-                  // Delete reminder on swipe
+          // Main content
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream:
                   FirebaseFirestore.instance
                       .collection('meds_reminder')
                       .doc(userId)
                       .collection('reminders')
-                      .doc(reminderId)
-                      .delete();
-                  // Show snackbar message after deletion
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text("Reminder deleted")));
-                },
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Icon(Icons.delete, color: Colors.white),
-                ),
-                child: Card(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 15,
-                  ),
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(10),
-                    title: Text(
-                      medicineName,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Time: $formattedTime",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                        Text(
-                          "Frequency: $frequency", // Display frequency
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: Switch(
-                      value: isActive,
-                      onChanged: (bool value) {
-                        // Toggle the reminder's active status
+                      .orderBy('createdAt', descending: true)
+                      .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text("No reminders set yet."));
+                }
+
+                final reminders = snapshot.data!.docs;
+
+                // Start a background task to check the time
+                _checkTimeForReminders(reminders);
+
+                return ListView.builder(
+                  itemCount: reminders.length,
+                  itemBuilder: (context, index) {
+                    final reminder = reminders[index];
+                    final reminderId = reminder.id;
+                    final medicineName = reminder['medicineName'] ?? 'Unknown';
+                    final time =
+                        (reminder['time'] as Timestamp)
+                            .toDate(); // Assuming 'time' is a Timestamp
+
+                    // Format time with AM/PM
+                    final formattedTime = _formatTime(time);
+
+                    final isActive =
+                        reminder['is_active'] ??
+                        true; // Default to true if 'is_active' is missing
+                    final frequency =
+                        reminder['frequency'] ??
+                        'Custom'; // Get frequency (Daily or Custom)
+
+                    return Dismissible(
+                      key: Key(reminderId),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) {
+                        // Delete reminder on swipe
                         FirebaseFirestore.instance
                             .collection('meds_reminder')
                             .doc(userId)
                             .collection('reminders')
                             .doc(reminderId)
-                            .update({'is_active': value});
+                            .delete();
+                        // Show snackbar message after deletion
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Reminder deleted")),
+                        );
                       },
-                      activeColor:
-                          AppColors.primary, // Use color from the constants
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
-        },
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(
+                          vertical:
+                              5, // Reduced vertical margin between the cards
+                          horizontal: 15,
+                        ),
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(10),
+                          leading: CircleAvatar(
+                            backgroundColor: AppColors.primary,
+                            child: Icon(
+                              Icons.medical_services,
+                              color: Colors.white,
+                            ),
+                          ),
+                          title: Text(
+                            medicineName,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Time: $formattedTime",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                              Text(
+                                "Frequency: $frequency", // Display frequency
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: Switch(
+                            value: isActive,
+                            onChanged: (bool value) {
+                              // Toggle the reminder's active status
+                              FirebaseFirestore.instance
+                                  .collection('meds_reminder')
+                                  .doc(userId)
+                                  .collection('reminders')
+                                  .doc(reminderId)
+                                  .update({'is_active': value});
+                            },
+                            activeColor:
+                                AppColors
+                                    .primary, // Use color from the constants
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -6,6 +6,7 @@ import 'package:grape/presentation/screens/add_reminder/event.dart';
 import 'package:grape/presentation/screens/show_reminder/showReminders_view.dart';
 import 'package:grape/presentation/screens/add_reminder/view.dart';
 import 'package:grape/presentation/screens/signup_screen/view.dart';
+import 'package:grape/presentation/screens/symptom%20tracker/view.dart';
 import '../presentation/screens/maps/maps.dart';
 
 class Routes {
@@ -14,6 +15,7 @@ class Routes {
   static const String maps = '/maps';
   static const String reminder = "/reminder";
   static const String reminderShow = "/reminderShow";
+  static const String symptomTracker = "/tracker";
 }
 
 class RouteGenerator {
@@ -33,6 +35,9 @@ class RouteGenerator {
 
       case Routes.reminderShow:
         return MaterialPageRoute(builder: (_) => const ViewRemindersPage());
+
+      case Routes.symptomTracker:
+        return MaterialPageRoute(builder: (_) => const HealthSymptomView());
 
       default:
         return unDefinedRoute();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:grape/presentation/screens/profile/bloc.dart';
 import 'firebase_options.dart';
 import 'presentation/color_constant/color_constant.dart';
 import 'router/router.dart';
@@ -151,6 +152,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<LoginBloc>(
           create: (context) => LoginBloc()..add(CheckLoginStatus()),
         ),
+        BlocProvider<ProfileBloc>(create: (context) => ProfileBloc()),
       ],
       child: MaterialApp(
         title: 'Grape App',
@@ -189,7 +191,7 @@ class _MyAppState extends State<MyApp> {
             hintStyle: TextStyle(color: AppColors.textHint),
           ),
         ),
-        initialRoute: authToken != null ? '/tracker' : Routes.loginPage,
+        initialRoute: authToken != null ? '/profile' : Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
       ),

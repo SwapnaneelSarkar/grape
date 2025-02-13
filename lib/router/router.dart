@@ -2,12 +2,12 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:grape/presentation/screens/login_screen/view.dart';
-import 'package:grape/presentation/screens/add_reminder/event.dart';
 import 'package:grape/presentation/screens/show_reminder/showReminders_view.dart';
 import 'package:grape/presentation/screens/add_reminder/view.dart';
 import 'package:grape/presentation/screens/signup_screen/view.dart';
 import 'package:grape/presentation/screens/symptom%20tracker/view.dart';
 import '../presentation/screens/maps/maps.dart';
+import '../presentation/screens/profile/view.dart';
 
 class Routes {
   static const String loginPage = '/auth';
@@ -16,6 +16,7 @@ class Routes {
   static const String reminder = "/reminder";
   static const String reminderShow = "/reminderShow";
   static const String symptomTracker = "/tracker";
+  static const String Profile = "/profile";
 }
 
 class RouteGenerator {
@@ -38,6 +39,9 @@ class RouteGenerator {
 
       case Routes.symptomTracker:
         return MaterialPageRoute(builder: (_) => const HealthSymptomView());
+
+      case Routes.Profile:
+        return MaterialPageRoute(builder: (_) => ProfilePage());
 
       default:
         return unDefinedRoute();

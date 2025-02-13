@@ -72,7 +72,7 @@ class BottomNavBar extends StatelessWidget {
                 BottomNavigationBarItem(icon: SizedBox(width: 50), label: ''),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.location_on),
-                  activeIcon: Icon(Icons.location_off_outlined),
+                  activeIcon: Icon(Icons.location_on_outlined),
                   label: '',
                 ),
                 BottomNavigationBarItem(

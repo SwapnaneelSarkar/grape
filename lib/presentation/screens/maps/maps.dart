@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:url_launcher/url_launcher.dart'; // For opening Google Maps directions
 
 import '../../color_constant/color_constant.dart';
+import '../bottm nav bar/view.dart';
 
 class MapView extends StatefulWidget {
   const MapView({Key? key}) : super(key: key);
@@ -206,22 +207,34 @@ class _MapViewState extends State<MapView> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60.0), // Height of the AppBar
         child: AppBar(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Nearby Pharmacies & Hospitals",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.buttonText,
+          automaticallyImplyLeading: false, // This removes the back button
+          title: Center(
+            // This centers the title
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment
+                      .center, // Aligns text vertically in the center
+              crossAxisAlignment:
+                  CrossAxisAlignment
+                      .center, // Ensures text is centered horizontally
+              children: [
+                Text(
+                  "Nearby Pharmacies & Hospitals",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.buttonText,
+                  ),
                 ),
-              ),
-              Text(
-                "Find the closest pharmacy or hospital",
-                style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
-              ),
-            ],
+                Text(
+                  "Find the closest pharmacy or hospital",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
           ),
           backgroundColor: AppColors.primary,
           elevation: 8.0, // Adds shadow
@@ -231,17 +244,10 @@ class _MapViewState extends State<MapView> {
               bottomRight: Radius.circular(30),
             ),
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.location_on),
-              onPressed: () {
-                // Handle location icon press
-                debugPrint("Location button pressed");
-              },
-            ),
-          ],
+          actions: [], // Removed back button
         ),
       ),
+
       body: Column(
         children: [
           Padding(
@@ -345,6 +351,9 @@ class _MapViewState extends State<MapView> {
               ),
             ),
         ],
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: 3, // You can change the currentIndex based on the screen
       ),
     );
   }

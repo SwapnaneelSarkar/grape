@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../color_constant/color_constant.dart';
 import '../bottm nav bar/view.dart';
 import 'bloc.dart';
 import 'event.dart';
@@ -37,10 +38,36 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0), // Height of the AppBar
+        child: AppBar(
+          automaticallyImplyLeading: false, // This removes the back button
+          title: Center(
+            // This centers the title
+            child: Text(
+              'Profile',
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.white, // Change color to grey
+              ),
+            ),
+          ),
+          backgroundColor: AppColors.primary,
+          elevation: 8.0, // Adds shadow
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: BlocBuilder<ProfileBloc, ProfileState>(
+            // ProfileBloc state
             builder: (context, state) {
               if (state is ProfileLoading) {
                 // Shimmer Effect for Profile Card and Sections
@@ -168,19 +195,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Custom Heading - centered and grey color
-                      Center(
-                        child: Text(
-                          'Profile',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black, // Change color to grey
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
                       // Profile Card
                       Card(
                         margin: EdgeInsets.zero,
@@ -190,12 +204,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Row(
                             children: [
                               CircleAvatar(
-                                radius:
-                                    35, // Smaller radius for the profile icon
+                                radius: 35,
                                 backgroundColor: Colors.grey,
                                 child: Icon(
                                   Icons.account_circle,
-                                  size: 50, // Smaller icon size
+                                  size: 50,
                                   color: Colors.white,
                                 ),
                               ),
@@ -288,8 +301,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       bottomNavigationBar: BottomNavBar(
-        currentIndex: 1,
-      ), // Add the existing BottomNavBar
+        currentIndex: 1, // Add the existing BottomNavBar
+      ),
     );
   }
 

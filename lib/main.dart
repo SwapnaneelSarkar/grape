@@ -191,7 +191,7 @@ class _MyAppState extends State<MyApp> {
             hintStyle: TextStyle(color: AppColors.textHint),
           ),
         ),
-        initialRoute: authToken != null ? '/profile' : Routes.loginPage,
+        initialRoute: authToken != null ? '/tnc' : Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
       ),

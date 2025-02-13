@@ -6,6 +6,7 @@ import 'package:grape/presentation/screens/show_reminder/showReminders_view.dart
 import 'package:grape/presentation/screens/add_reminder/view.dart';
 import 'package:grape/presentation/screens/signup_screen/view.dart';
 import 'package:grape/presentation/screens/symptom%20tracker/view.dart';
+import 'package:grape/presentation/screens/terms%20and%20conditions/view.dart';
 import '../presentation/screens/maps/maps.dart';
 import '../presentation/screens/profile/view.dart';
 
@@ -17,6 +18,7 @@ class Routes {
   static const String reminderShow = "/reminderShow";
   static const String symptomTracker = "/tracker";
   static const String Profile = "/profile";
+  static const String terms = "/tnc";
 }
 
 class RouteGenerator {
@@ -42,6 +44,9 @@ class RouteGenerator {
 
       case Routes.Profile:
         return MaterialPageRoute(builder: (_) => ProfilePage());
+
+      case Routes.terms:
+        return MaterialPageRoute(builder: (_) => TermsAndConditionsPage());
 
       default:
         return unDefinedRoute();

@@ -21,15 +21,12 @@ class _MedicationPageState extends State<MedicationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0), // Height of the AppBar
+        preferredSize: Size.fromHeight(60.0),
         child: AppBar(
-          automaticallyImplyLeading: true, // Ensures the back button is visible
+          automaticallyImplyLeading: true,
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios, // iOS-style back arrow
-              color: Colors.white, // White color for the back button
-            ),
-            onPressed: () => Navigator.pop(context), // Pop the current screen
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
           ),
           title: Center(
             child: Text(

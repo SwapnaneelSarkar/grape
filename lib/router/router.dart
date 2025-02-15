@@ -11,6 +11,7 @@ import 'package:grape/presentation/screens/add_reminder/view.dart';
 import 'package:grape/presentation/screens/signup_screen/view.dart';
 import 'package:grape/presentation/screens/symptom%20tracker/view.dart';
 import 'package:grape/presentation/screens/terms%20and%20conditions/view.dart';
+import '../presentation/screens/heath record add/view.dart';
 import '../presentation/screens/maps/maps.dart';
 import '../presentation/screens/profile/view.dart';
 
@@ -29,6 +30,7 @@ class Routes {
   static const String home = "/home";
   static const String meds = "/meds";
   static const String appointmentAdd = "/appointmentAdd";
+  static const String HealthRecordPage = "/healthView";
 }
 
 class RouteGenerator {
@@ -69,6 +71,9 @@ class RouteGenerator {
 
       case Routes.pp:
         return MaterialPageRoute(builder: (_) => PrivacyPolicyPage());
+
+      case Routes.HealthRecordPage:
+        return MaterialPageRoute(builder: (_) => HealthRecordPage());
 
       default:
         return unDefinedRoute();

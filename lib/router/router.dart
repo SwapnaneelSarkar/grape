@@ -12,6 +12,7 @@ import 'package:grape/presentation/screens/add_reminder/view.dart';
 import 'package:grape/presentation/screens/signup_screen/view.dart';
 import 'package:grape/presentation/screens/symptom%20tracker/view.dart';
 import 'package:grape/presentation/screens/terms%20and%20conditions/view.dart';
+import '../presentation/screens/community/community_list.dart';
 import '../presentation/screens/heath record add/view.dart';
 import '../presentation/screens/maps/maps.dart';
 import '../presentation/screens/profile/view.dart';
@@ -33,6 +34,8 @@ class Routes {
   static const String appointmentAdd = "/appointmentAdd";
   static const String HealthRecordPage = "/healthView";
   static const String recordView = "/recordView";
+
+  static const String CommunityListPage = "/CommunityListPage";
 }
 
 class RouteGenerator {
@@ -79,6 +82,9 @@ class RouteGenerator {
 
       case Routes.recordView:
         return MaterialPageRoute(builder: (_) => MedicalRecordViewPage());
+
+      case Routes.CommunityListPage:
+        return MaterialPageRoute(builder: (_) => CommunityListPage());
 
       default:
         return unDefinedRoute();

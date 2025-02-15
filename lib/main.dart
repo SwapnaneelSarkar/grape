@@ -198,7 +198,8 @@ class _MyAppState extends State<MyApp> {
             hintStyle: TextStyle(color: AppColors.textHint),
           ),
         ),
-        initialRoute: authToken != null ? '/recordView' : Routes.loginPage,
+        initialRoute:
+            authToken != null ? '/CommunityListPage' : Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
       ),

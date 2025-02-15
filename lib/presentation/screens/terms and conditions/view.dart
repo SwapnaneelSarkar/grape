@@ -1,24 +1,58 @@
 import 'package:flutter/material.dart';
 
+import '../../color_constant/color_constant.dart';
+
 class TermsAndConditionsPage extends StatelessWidget {
   const TermsAndConditionsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true, // iOS-style back arrow
-        backgroundColor:
-            Colors.transparent, // Transparent background for no top bar
-        elevation: 0, // No shadow
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ), // iOS-style back arrow
-          onPressed: () {
-            Navigator.pop(context); // Go back to the previous screen
-          },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70.0), // Height of the AppBar
+        child: AppBar(
+          automaticallyImplyLeading: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Center(
+            // This centers the title
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment
+                      .center, // Aligns text vertically in the center
+              crossAxisAlignment:
+                  CrossAxisAlignment
+                      .center, // Ensures text is centered horizontally
+              children: [
+                Text(
+                  "Terms and Conditions",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.buttonText,
+                  ),
+                ),
+                // Text(
+                //   "All your medical records in one place",
+                //   style: TextStyle(
+                //     fontSize: 12,
+                //     color: AppColors.textSecondary,
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+          backgroundColor: AppColors.primary,
+          elevation: 8.0, // Adds shadow
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+          ),
+          actions: [],
         ),
       ),
       body: Padding(

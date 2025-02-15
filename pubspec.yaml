@@ -54,6 +54,8 @@ dependencies:
   image_picker: ^1.1.2
   shared_preferences: ^2.5.2
   permission_handler: ^11.3.1
+  cached_network_image: ^3.4.1
+  sqflite: ^2.0.0+4
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/animated_background.json
+    - assets/community.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

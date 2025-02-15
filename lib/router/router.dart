@@ -1,9 +1,11 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:grape/presentation/screens/appointments/view.dart';
 import 'package:grape/presentation/screens/home_screen/view.dart';
 import 'package:grape/presentation/screens/login_screen/view.dart';
 import 'package:grape/presentation/screens/medicines/view.dart';
+import 'package:grape/presentation/screens/privacy%20policy/view.dart';
 import 'package:grape/presentation/screens/show_reminder/showReminders_view.dart';
 import 'package:grape/presentation/screens/add_reminder/view.dart';
 import 'package:grape/presentation/screens/signup_screen/view.dart';
@@ -20,10 +22,13 @@ class Routes {
   static const String reminderShow = "/reminderShow";
   static const String symptomTracker = "/tracker";
   static const String Profile = "/profile";
+
   static const String terms = "/tnc";
+  static const String pp = "/pp";
 
   static const String home = "/home";
   static const String meds = "/meds";
+  static const String appointmentAdd = "/appointmentAdd";
 }
 
 class RouteGenerator {
@@ -58,6 +63,12 @@ class RouteGenerator {
 
       case Routes.meds:
         return MaterialPageRoute(builder: (_) => MedicationPage());
+
+      case Routes.appointmentAdd:
+        return MaterialPageRoute(builder: (_) => AppointmentPage());
+
+      case Routes.pp:
+        return MaterialPageRoute(builder: (_) => PrivacyPolicyPage());
 
       default:
         return unDefinedRoute();

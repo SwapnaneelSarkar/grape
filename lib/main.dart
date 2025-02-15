@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:grape/presentation/screens/appointments/bloc.dart';
 import 'package:grape/presentation/screens/profile/bloc.dart';
 import 'firebase_options.dart';
 import 'presentation/color_constant/color_constant.dart';
@@ -155,9 +156,8 @@ class _MyAppState extends State<MyApp> {
           create: (context) => LoginBloc()..add(CheckLoginStatus()),
         ),
         BlocProvider<ProfileBloc>(create: (context) => ProfileBloc()),
-        BlocProvider<MedicationBloc>(
-          create: (context) => MedicationBloc(),
-        ), // Add MedicationBloc
+        BlocProvider<MedicationBloc>(create: (context) => MedicationBloc()),
+        BlocProvider<AppointmentBloc>(create: (context) => AppointmentBloc()),
       ],
       child: MaterialApp(
         title: 'Grape App',
@@ -196,7 +196,7 @@ class _MyAppState extends State<MyApp> {
             hintStyle: TextStyle(color: AppColors.textHint),
           ),
         ),
-        initialRoute: authToken != null ? '/meds' : Routes.loginPage,
+        initialRoute: authToken != null ? '/reminderShow' : Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
       ),

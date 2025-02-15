@@ -6,6 +6,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grape/presentation/screens/profile/bloc.dart';
 import 'firebase_options.dart';
 import 'presentation/color_constant/color_constant.dart';
+import 'presentation/screens/home_screen/bloc.dart';
+import 'presentation/screens/medicines/bloc.dart';
 import 'router/router.dart';
 import 'presentation/screens/login_screen/bloc.dart';
 import 'presentation/screens/login_screen/event.dart';
@@ -153,6 +155,9 @@ class _MyAppState extends State<MyApp> {
           create: (context) => LoginBloc()..add(CheckLoginStatus()),
         ),
         BlocProvider<ProfileBloc>(create: (context) => ProfileBloc()),
+        BlocProvider<MedicationBloc>(
+          create: (context) => MedicationBloc(),
+        ), // Add MedicationBloc
       ],
       child: MaterialApp(
         title: 'Grape App',
@@ -191,7 +196,7 @@ class _MyAppState extends State<MyApp> {
             hintStyle: TextStyle(color: AppColors.textHint),
           ),
         ),
-        initialRoute: authToken != null ? '/tnc' : Routes.loginPage,
+        initialRoute: authToken != null ? '/meds' : Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
       ),

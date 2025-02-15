@@ -301,7 +301,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       bottomNavigationBar: BottomNavBar(
-        currentIndex: 1, // Add the existing BottomNavBar
+        currentIndex: 4, // Add the existing BottomNavBar
       ),
     );
   }

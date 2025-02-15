@@ -62,6 +62,7 @@ android {
 dependencies {
     // Add the desugaring library
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+    implementation 'com.google.android.gms:play-services-base:17.6.0'
 
     // Other dependencies...
 }

@@ -1,16 +1,17 @@
-import 'dart:io';
-
 abstract class HealthRecordEvent {}
 
 class SubmitHealthRecordEvent extends HealthRecordEvent {
   final Map<String, dynamic> recordData;
+  SubmitHealthRecordEvent({required this.recordData});
+}
 
-  SubmitHealthRecordEvent(this.recordData);
+class SelectTriggerEvent extends HealthRecordEvent {
+  final String trigger;
+  final bool isSelected;
+  SelectTriggerEvent({required this.trigger, required this.isSelected});
 }
 
 class UploadFileEvent extends HealthRecordEvent {
-  final File file;
-  final String fileType;
-
-  UploadFileEvent(this.file, this.fileType);
+  final String filePath;
+  UploadFileEvent({required this.filePath});
 }

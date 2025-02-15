@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:grape/presentation/screens/appointments/view.dart';
 import 'package:grape/presentation/screens/home_screen/view.dart';
 import 'package:grape/presentation/screens/login_screen/view.dart';
+import 'package:grape/presentation/screens/med%20record%20view/view.dart';
 import 'package:grape/presentation/screens/medicines/view.dart';
 import 'package:grape/presentation/screens/privacy%20policy/view.dart';
 import 'package:grape/presentation/screens/show_reminder/showReminders_view.dart';
@@ -31,6 +32,7 @@ class Routes {
   static const String meds = "/meds";
   static const String appointmentAdd = "/appointmentAdd";
   static const String HealthRecordPage = "/healthView";
+  static const String recordView = "/recordView";
 }
 
 class RouteGenerator {
@@ -74,6 +76,9 @@ class RouteGenerator {
 
       case Routes.HealthRecordPage:
         return MaterialPageRoute(builder: (_) => HealthRecordPage());
+
+      case Routes.recordView:
+        return MaterialPageRoute(builder: (_) => MedicalRecordViewPage());
 
       default:
         return unDefinedRoute();

@@ -2,17 +2,24 @@ abstract class HealthRecordState {}
 
 class HealthRecordInitial extends HealthRecordState {}
 
-class UploadingState extends HealthRecordState {}
+class HealthRecordSubmitting extends HealthRecordState {}
 
-class UploadedState extends HealthRecordState {
-  final String downloadUrl;
-  UploadedState(this.downloadUrl);
+class HealthRecordSubmitted extends HealthRecordState {
+  final String message;
+  HealthRecordSubmitted({required this.message});
 }
 
-class UploadFailedState extends HealthRecordState {}
+class HealthRecordError extends HealthRecordState {
+  final String error;
+  HealthRecordError({required this.error});
+}
 
-class SubmittingState extends HealthRecordState {}
+class HealthRecordFileUploaded extends HealthRecordState {
+  final String fileUrl;
+  HealthRecordFileUploaded({required this.fileUrl});
+}
 
-class SubmittedState extends HealthRecordState {}
-
-class SubmissionFailedState extends HealthRecordState {}
+class HealthRecordTriggersUpdated extends HealthRecordState {
+  final Map<String, bool> selectedTriggers;
+  HealthRecordTriggersUpdated({required this.selectedTriggers});
+}

@@ -1,4 +1,3 @@
-// Events
 abstract class MedicationEvent {}
 
 class AddMedicationEvent extends MedicationEvent {

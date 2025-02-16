@@ -199,7 +199,7 @@ class _MyAppState extends State<MyApp> {
             hintStyle: TextStyle(color: AppColors.textHint),
           ),
         ),
-        initialRoute: authToken != null ? '/edit' : Routes.loginPage,
+        initialRoute: authToken != null ? '/medShow' : Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
       ),

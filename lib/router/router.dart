@@ -8,6 +8,7 @@ import 'package:grape/presentation/screens/login_screen/view.dart';
 import 'package:grape/presentation/screens/med%20record%20view/view.dart';
 import 'package:grape/presentation/screens/medicines/view.dart';
 import 'package:grape/presentation/screens/privacy%20policy/view.dart';
+import 'package:grape/presentation/screens/show_meds/view.dart';
 import 'package:grape/presentation/screens/show_reminder/showReminders_view.dart';
 import 'package:grape/presentation/screens/add_reminder/view.dart';
 import 'package:grape/presentation/screens/signup_screen/view.dart';
@@ -32,6 +33,7 @@ class Routes {
 
   static const String home = "/home";
   static const String meds = "/meds";
+  static const String medshow = "/medShow";
   static const String appointmentAdd = "/appointmentAdd";
   static const String HealthRecordPage = "/healthView";
   static const String recordView = "/recordView";
@@ -91,6 +93,9 @@ class RouteGenerator {
 
       case Routes.editProfile:
         return MaterialPageRoute(builder: (_) => EditProfilePage());
+
+      case Routes.medshow:
+        return MaterialPageRoute(builder: (_) => MedicineShowPage());
 
       default:
         return unDefinedRoute();

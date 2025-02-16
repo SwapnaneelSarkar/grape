@@ -1,45 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// Events
-abstract class MedicationEvent {}
+import 'event.dart';
+import 'state.dart';
 
-class AddMedicationEvent extends MedicationEvent {
-  final String medicationName;
-  final int dosage;
-  final String frequency;
-  final String reminderTime;
-  final bool repeatDaily;
-  final DateTime startDate;
-
-  AddMedicationEvent({
-    required this.medicationName,
-    required this.dosage,
-    required this.frequency,
-    required this.reminderTime,
-    required this.repeatDaily,
-    required this.startDate,
-  });
-}
-
-// States
-abstract class MedicationState {}
-
-class MedicationInitialState extends MedicationState {}
-
-class MedicationLoadingState extends MedicationState {}
-
-class MedicationAddedState extends MedicationState {}
-
-class MedicationErrorState extends MedicationState {
-  final String error;
-
-  MedicationErrorState({required this.error});
-}
-
-// BLoC Logic
 class MedicationBloc extends Bloc<MedicationEvent, MedicationState> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   MedicationBloc() : super(MedicationInitialState()) {
     // Register event handler for AddMedicationEvent
@@ -47,18 +15,40 @@ class MedicationBloc extends Bloc<MedicationEvent, MedicationState> {
       try {
         emit(MedicationLoadingState());
 
-        // Adding medication data to Firestore
-        await _firestore.collection('medications').add({
+        // Check if the user is authenticated
+        User? user = _auth.currentUser;
+        if (user == null) {
+          emit(MedicationErrorState(error: 'User not authenticated'));
+          print("DEBUG: User is not authenticated");
+          return;
+        }
+
+        print("DEBUG: User UID: ${user.uid}");
+
+        // Prepare medication data
+        final medicationData = {
           'medicationName': event.medicationName,
           'dosage': event.dosage,
           'frequency': event.frequency,
           'reminderTime': event.reminderTime,
           'repeatDaily': event.repeatDaily,
           'startDate': event.startDate,
-        });
+        };
+
+        print("DEBUG: Medication data to save: $medicationData");
+
+        // Adding medication data to Firestore under the user's UID
+        await _firestore
+            .collection('users')
+            .doc(user.uid) // Store under the user's UID
+            .collection('medications')
+            .add(medicationData);
+
+        print("DEBUG: Medication successfully added to Firestore");
 
         emit(MedicationAddedState());
       } catch (e) {
+        print("DEBUG: Error occurred: $e");
         emit(MedicationErrorState(error: e.toString()));
       }
     });

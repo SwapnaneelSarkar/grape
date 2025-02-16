@@ -12,7 +12,7 @@ class BottomNavBar extends StatelessWidget {
         Navigator.pushReplacementNamed(context, '/home');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/Community');
+        Navigator.pushReplacementNamed(context, '/CommunityListPage');
         break;
       case 2:
         Navigator.pushReplacementNamed(context, '/');
@@ -102,7 +102,7 @@ class BottomNavBar extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(
                       context,
-                      '/Reminders',
+                      '/reminderShow',
                     ); // Redirect to Reminders page
                   },
                   backgroundColor: Colors.transparent,

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grape/presentation/screens/appointments/bloc.dart';
+import 'package:grape/presentation/screens/edit%20profile/bloc.dart';
 import 'package:grape/presentation/screens/heath%20record%20add/bloc.dart';
 import 'package:grape/presentation/screens/profile/bloc.dart';
 import 'firebase_options.dart';
@@ -198,8 +199,7 @@ class _MyAppState extends State<MyApp> {
             hintStyle: TextStyle(color: AppColors.textHint),
           ),
         ),
-        initialRoute:
-            authToken != null ? '/CommunityListPage' : Routes.loginPage,
+        initialRoute: authToken != null ? '/edit' : Routes.loginPage,
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
       ),

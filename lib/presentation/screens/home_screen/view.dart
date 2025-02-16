@@ -47,6 +47,7 @@ class WaveClipper extends CustomClipper<Path> {
 }
 
 // News Service class
+// News Service class
 class NewsService {
   static const String apiUrl = 'https://newsapi.org/v2/everything';
   static const String apiKey = 'f0db19f0aa5e439c907f9731008261d2';
@@ -66,11 +67,20 @@ class NewsService {
 
         for (var article in data['articles']) {
           medicalArticles.add({
-            'title': article['title'],
-            'description': article['description'],
-            'image': article['urlToImage'] ?? '',
-            'url': article['url'],
-            'publishedAt': article['publishedAt'],
+            'title':
+                article['title'] ??
+                'No title available', // Handle null or missing title
+            'description':
+                article['description'] ??
+                'No description available', // Handle null or missing description
+            'image':
+                article['urlToImage'] ?? '', // Handle null or missing image URL
+            'url': article['url'] ?? '', // Handle null or missing URL
+            'publishedAt': article['publishedAt'] ?? 'Unknown date',
+            'content':
+                article['content'] ??
+                'Content not available', // Ensure content is passed
+            'url': article['url'], // Handle null or missing publishedAt
           });
         }
 
@@ -560,17 +570,19 @@ class _HomeScreenState extends State<HomeScreen> {
           MaterialPageRoute(
             builder:
                 (context) => ArticleDetailPage(
-                  title: article['title']!,
-                  description: article['description']!,
-                  imageUrl: article['image']!,
-                  author:
-                      article['author'] ??
-                      'Unknown', // Add a fallback for author
-                  publishedAt: article['publishedAt']!,
+                  title: article['title'] ?? 'No title', // Fallback for title
+                  description:
+                      article['description'] ??
+                      'No description available', // Fallback for description
+                  imageUrl: article['image'] ?? '', // Fallback for image URL
+                  author: article['author'] ?? 'Unknown', // Fallback for author
+                  publishedAt:
+                      article['publishedAt'] ??
+                      'Unknown date', // Fallback for publishedAt
                   content:
                       article['content'] ??
                       'No content available', // Fallback for content
-                  url: article['url']!,
+                  url: article['url'] ?? '', // Fallback for URL
                 ),
           ),
         );
@@ -615,7 +627,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         errorBuilder: (context, error, stackTrace) {
                           return Image.network(
-                            'https://via.placeholder.com/150', // Default image if the URL fails to load
+                            'assets/error.png/150',
                             width: 120,
                             height: 100,
                             fit: BoxFit.cover,
@@ -623,7 +635,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       )
                       : Image.network(
-                        'https://via.placeholder.com/150', // Default image when no URL provided
+                        'assets/error.png/150',
                         width: 120,
                         height: 100,
                         fit: BoxFit.cover,
@@ -639,7 +651,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // Title
                     Text(
-                      article['title']!,
+                      article['title'] ?? 'No title', // Default value for title
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -651,7 +663,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 8),
                     // Description
                     Text(
-                      article['description']!,
+                      article['description'] ??
+                          'No description available', // Default value for description
                       style: const TextStyle(color: Colors.black54),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
@@ -659,7 +672,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 8),
                     // Published date
                     Text(
-                      'Published on: ${article['publishedAt']}',
+                      'Published on: ${article['publishedAt'] ?? 'Unknown date'}', // Default value for published date
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ],

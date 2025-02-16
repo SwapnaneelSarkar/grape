@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grape/presentation/color_constant/color_constant.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ArticleDetailPage extends StatelessWidget {
@@ -25,9 +26,41 @@ class ArticleDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
-        backgroundColor: Colors.blueAccent,
-        elevation: 4,
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Center(
+          // This centers the title
+          child: Column(
+            mainAxisAlignment:
+                MainAxisAlignment
+                    .center, // Aligns text vertically in the center
+            crossAxisAlignment:
+                CrossAxisAlignment
+                    .center, // Ensures text is centered horizontally
+            children: [
+              Text(
+                title, // Use the article's title here
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white, // Use white color for title text
+                ),
+              ),
+            ],
+          ),
+        ),
+        backgroundColor:
+            AppColors.primary, // Replace with AppColors.primary if needed
+        elevation: 8.0, // Adds shadow
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

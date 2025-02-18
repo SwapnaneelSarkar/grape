@@ -19,10 +19,13 @@ import '../presentation/screens/community/community_list.dart';
 import '../presentation/screens/heath record add/view.dart';
 import '../presentation/screens/maps/maps.dart';
 import '../presentation/screens/profile/view.dart';
+import '../presentation/screens/splash_screen/view.dart';
 
 class Routes {
   static const String loginPage = '/auth';
   static const String signup = '/signup';
+  static const String splash = '/splash';
+
   static const String maps = '/maps';
   static const String reminder = "/reminder";
   static const String reminderShow = "/reminderShow";
@@ -101,6 +104,9 @@ class RouteGenerator {
 
       case Routes.chatbot:
         return MaterialPageRoute(builder: (_) => SpeechToTextChatPage());
+
+      case Routes.splash:
+        return MaterialPageRoute(builder: (_) => SplashScreen());
 
       default:
         return unDefinedRoute();

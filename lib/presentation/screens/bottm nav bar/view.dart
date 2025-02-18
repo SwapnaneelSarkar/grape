@@ -102,13 +102,13 @@ class BottomNavBar extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushNamed(
                       context,
-                      '/reminderShow',
+                      '/chatbot',
                     ); // Redirect to Reminders page
                   },
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   child: Icon(
-                    Icons.add,
+                    Icons.chat_rounded,
                     color: Colors.blue,
                     size: 30, // Make the "add" icon larger as well
                   ),

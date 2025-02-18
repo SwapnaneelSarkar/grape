@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../color_constant/color_constant.dart';
+import '../add_reminder/view.dart';
 import '../bottm nav bar/view.dart';
+import '../edit profile/view.dart';
+import '../heath record add/view.dart';
+import '../privacy policy/view.dart';
+import '../show_meds/view.dart';
+import '../terms and conditions/view.dart';
 import 'bloc.dart';
 import 'event.dart';
 import 'state.dart';
@@ -25,7 +31,54 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // Navigate to another page on section tap
   void _navigateToSection(String section) {
-    print('Navigating to $section');
+    switch (section) {
+      case 'My Appointments':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AppointmentShowPage()),
+        );
+        break;
+      case 'My Meds':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MedicineReminderView()),
+        );
+        break;
+      case 'Health Records':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HealthRecordPage()),
+        );
+        break;
+      case 'Edit Profile':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EditProfilePage()),
+        );
+        break;
+      // case 'Feedback':
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => const FeedbackPage()),
+      //   );
+      //   break;
+      case 'Terms and Conditions':
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const TermsAndConditionsPage(),
+          ),
+        );
+        break;
+      case 'Privacy Policy':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PrivacyPolicyPage()),
+        );
+        break;
+      default:
+        print('Unknown section: $section');
+    }
   }
 
   // Log out user

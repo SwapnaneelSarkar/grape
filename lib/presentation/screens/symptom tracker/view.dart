@@ -48,7 +48,7 @@ class _HealthSymptomViewState extends State<HealthSymptomView>
     final String apiUrl =
         'https://integrate.api.nvidia.com/v1/chat/completions';
     final String apiKey =
-        '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';
+        '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';
 
     String answersString = '';
     answers.forEach((questionId, answer) {
@@ -85,15 +85,19 @@ class _HealthSymptomViewState extends State<HealthSymptomView>
         options: Options(headers: headers),
       );
 
+      print('Response Status: ${response.statusCode}');
+      print('Response Data: ${response.data}'); // Debug print response
+
       setState(() {
         isLoading = false;
         if (response.statusCode == 200) {
           result =
               response.data['choices'][0]['message']['content'] ??
               'No response';
-          _resultController.forward();
+          _showPopup(result); // Show response in a popup dialog
         } else {
           result = 'Error: Request failed with status ${response.statusCode}';
+          _showPopup(result); // Show error in popup dialog
         }
       });
     } catch (e) {
@@ -101,7 +105,29 @@ class _HealthSymptomViewState extends State<HealthSymptomView>
         isLoading = false;
         result = 'Error: $e';
       });
+      _showPopup(result); // Show error in popup dialog
     }
+  }
+
+  // Method to show a popup dialog with the result
+  void _showPopup(String result) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Diagnosis Result'),
+          content: Text(result),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   String _getQuestionTextById(String questionId) {
@@ -120,100 +146,79 @@ class _HealthSymptomViewState extends State<HealthSymptomView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 24.0,
-            ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70.0),
+        child: AppBar(
+          automaticallyImplyLeading: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Back Button and Title
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    Expanded(
-                      child: Text(
-                        "Health Symptom Tracker",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 40),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                // Questions List
-                Expanded(
-                  child: ListView(
-                    children:
-                        questions.map((question) {
-                          return _buildQuestion(
-                            context,
-                            questionId: question.id,
-                            questionText: question.questionText,
-                            options: question.options,
-                          );
-                        }).toList(),
+                Text(
+                  "Terms and Conditions",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.buttonText,
                   ),
                 ),
-
-                // Animated Result Section
-                if (result.isNotEmpty) ...[
-                  const SizedBox(height: 20),
-                  FadeTransition(
-                    opacity: _resultOpacity,
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.blueAccent.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blueAccent.withOpacity(0.2),
-                            blurRadius: 10,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        'Diagnosis: $result',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 80), // Space for the bottom navigation
               ],
             ),
           ),
-        ],
+          backgroundColor: AppColors.primary,
+          elevation: 8.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+          ),
+          actions: [],
+        ),
       ),
-
-      // Floating Submit Button
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children:
+                    questions.map((question) {
+                      return _buildQuestion(
+                        context,
+                        questionId: question.id,
+                        questionText: question.questionText,
+                        options: question.options,
+                      );
+                    }).toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: sendToApi,
         backgroundColor: Colors.blueAccent,
-        label: const Text(
-          'Submit',
+        label: Text(
+          isLoading ? 'Submitting...' : 'Submit',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        icon: const Icon(Icons.check, color: Colors.white),
+        icon:
+            isLoading
+                ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(color: Colors.white),
+                )
+                : Icon(Icons.check, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

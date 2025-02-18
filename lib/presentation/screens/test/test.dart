@@ -1,172 +1,83 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:csv/csv.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+class FirebaseUploader extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: SendRequestPage());
-  }
+  _FirebaseUploaderState createState() => _FirebaseUploaderState();
 }
 
-class SendRequestPage extends StatefulWidget {
-  @override
-  _SendRequestPageState createState() => _SendRequestPageState();
-}
+class _FirebaseUploaderState extends State<FirebaseUploader> {
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-class _SendRequestPageState extends State<SendRequestPage> {
-  final String apiUrl = 'https://integrate.api.nvidia.com/v1/chat/completions';
-  final String apiKey =
-      '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';
+  // Disease restrictions (example)
+  Map<String, List<String>> diseaseRestrictions = {
+    "diabetes": ["sugar", "white bread", "potato", "high fructose corn syrup"],
+    "asthma": ["peanuts", "dairy", "eggs", "wheat"],
+    "cancer": ["processed meats", "alcohol", "sugar", "high-fat foods"],
+  };
 
-  final Map<String, String> answers = {};
-  String result = '';
+  // Function to read the CSV and upload to Firebase
+  Future<void> uploadDataToFirebase() async {
+    final csvString = await rootBundle.loadString(
+      'assets/Food Ingredients and Recipe Dataset with Image Name Mapping.csv',
+    );
+    List<List<dynamic>> csvData = CsvToListConverter().convert(csvString);
 
-  // Function to send request using Dio
-  Future<void> sendRequest(Map<String, String> answers) async {
-    final String requestBody = '''{
-  "model": "writer/palmyra-fin-70b-32k",
-  "temperature": 0.2,
-  "top_p": 0.7,
-  "frequency_penalty": 0,
-  "presence_penalty": 0,
-  "max_tokens": 1024,
-  "stream": false,
-  "messages": [
-    {
-      "content": "Please assess if the person has any chronic diseases based on the following answers: $answers",
-      "role": "user"
-    }
-  ]
-}''';
+    // Iterate through each row (recipe) and upload to Firestore and Storage
+    for (int i = 1; i < csvData.length; i++) {
+      String title = csvData[i][1]; // Recipe title
+      String imageName = csvData[i][4]; // Image name
+      String cleanedIngredients = csvData[i][5]; // Cleaned ingredients
+      String instructions = csvData[i][3]; // Instructions
 
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $apiKey',
-    };
+      // Upload image to Firebase Storage
+      await uploadImageToStorage(imageName);
 
-    // Printing the request headers and body
-    print("Request URL: $apiUrl");
-    print("Request Headers: $headers");
-    print("Request Body: $requestBody");
-
-    try {
-      // Create Dio instance
-      Dio dio = Dio();
-
-      // Send POST request
-      final response = await dio.post(
-        apiUrl,
-        data: requestBody,
-        options: Options(headers: headers),
-      );
-
-      if (response.statusCode == 200) {
-        // If request is successful
-        setState(() {
-          result =
-              response.data['choices'][0]['message']['content'] ??
-              'No response';
-        });
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.data}');
-      } else {
-        print('Request failed with status: ${response.statusCode}');
-        setState(() {
-          result = 'Error: Request failed with status ${response.statusCode}';
-        });
-      }
-    } catch (e) {
-      print('Error: $e');
-      setState(() {
-        result = 'Error: $e';
+      // Create recipe document in Firestore
+      await firestore.collection('recipes').add({
+        'title': title,
+        'image_name': imageName,
+        'ingredients': cleanedIngredients,
+        'instructions': instructions,
+        'image_url':
+            'https://firebase_storage_url/${imageName}.jpg', // Store URL of the image
       });
     }
+  }
+
+  // Function to upload the image to Firebase Storage
+  Future<void> uploadImageToStorage(String imageName) async {
+    try {
+      // Assuming you have the image as an asset
+      final byteData = await rootBundle.load('assets/images/$imageName.jpg');
+      final fileData = byteData.buffer.asUint8List();
+
+      // Upload the image to Firebase Storage
+      await storage.ref('recipe_images/$imageName.jpg').putData(fileData);
+
+      print('Image $imageName uploaded successfully!');
+    } catch (e) {
+      print("Failed to upload image: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    uploadDataToFirebase(); // Trigger the upload process on startup
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Health Questionnaire')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // MCQ for Diabetes
-              Text('Do you have a history of diabetes?'),
-              RadioListTile<String>(
-                title: Text('Yes'),
-                value: 'Yes',
-                groupValue: answers['diabetes'],
-                onChanged: (value) {
-                  setState(() {
-                    answers['diabetes'] = value!;
-                  });
-                },
-              ),
-              RadioListTile<String>(
-                title: Text('No'),
-                value: 'No',
-                groupValue: answers['diabetes'],
-                onChanged: (value) {
-                  setState(() {
-                    answers['diabetes'] = value!;
-                  });
-                },
-              ),
-              SizedBox(height: 20),
-
-              // MCQ for Smoking
-              Text('Do you smoke?'),
-              RadioListTile<String>(
-                title: Text('Yes'),
-                value: 'Yes',
-                groupValue: answers['smoking'],
-                onChanged: (value) {
-                  setState(() {
-                    answers['smoking'] = value!;
-                  });
-                },
-              ),
-              RadioListTile<String>(
-                title: Text('No'),
-                value: 'No',
-                groupValue: answers['smoking'],
-                onChanged: (value) {
-                  setState(() {
-                    answers['smoking'] = value!;
-                  });
-                },
-              ),
-              SizedBox(height: 20),
-
-              // Button to submit answers
-              ElevatedButton(
-                onPressed: () {
-                  if (answers.isNotEmpty) {
-                    sendRequest(answers);
-                  } else {
-                    setState(() {
-                      result = 'Please answer all questions';
-                    });
-                  }
-                },
-                child: Text('Submit'),
-              ),
-              SizedBox(height: 20),
-
-              // Show result
-              if (result.isNotEmpty)
-                Text(
-                  'Assessment Result: $result',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-            ],
-          ),
-        ),
-      ),
+      appBar: AppBar(title: Text('Upload Recipes to Firebase')),
+      body: Center(child: Text('Uploading data to Firebase...')),
     );
   }
 }

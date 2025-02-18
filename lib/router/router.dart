@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:grape/presentation/screens/AI%20chatbot/chatbot.dart';
 import 'package:grape/presentation/screens/appointments/view.dart';
 import 'package:grape/presentation/screens/edit%20profile/view.dart';
 import 'package:grape/presentation/screens/home_screen/view.dart';
@@ -33,7 +34,7 @@ class Routes {
 
   static const String home = "/home";
   static const String meds = "/meds";
-  static const String medshow = "/medShow";
+  static const String appointmentShow = "/appointmentShow";
   static const String appointmentAdd = "/appointmentAdd";
   static const String HealthRecordPage = "/healthView";
   static const String recordView = "/recordView";
@@ -41,6 +42,7 @@ class Routes {
   static const String CommunityListPage = "/CommunityListPage";
 
   static const String editProfile = "/edit";
+  static const String chatbot = "/chatbot";
 }
 
 class RouteGenerator {
@@ -94,8 +96,11 @@ class RouteGenerator {
       case Routes.editProfile:
         return MaterialPageRoute(builder: (_) => EditProfilePage());
 
-      case Routes.medshow:
-        return MaterialPageRoute(builder: (_) => MedicineShowPage());
+      case Routes.appointmentShow:
+        return MaterialPageRoute(builder: (_) => AppointmentShowPage());
+
+      case Routes.chatbot:
+        return MaterialPageRoute(builder: (_) => SpeechToTextChatPage());
 
       default:
         return unDefinedRoute();

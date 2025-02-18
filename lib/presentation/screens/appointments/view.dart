@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grape/presentation/color_constant/color_constant.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppointmentPage extends StatefulWidget {
   @override
@@ -26,13 +28,33 @@ class _AppointmentPageState extends State<AppointmentPage> {
       });
 
       try {
-        // Add the appointment to Firestore
+        // Get the current authenticated user's UID
+        String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+        // Split the selected time to get hour and minute
+        List<String> timeParts = selectedTime.split(':');
+        int hour = int.parse(timeParts[0]);
+        int minute = 0; // We can set it to 0 for simplicity
+
+        // Combine the selected date with the selected time
+        DateTime combinedDateTime = DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          hour,
+          minute,
+        );
+
+        // Add the appointment to Firestore with userId
         await FirebaseFirestore.instance.collection('appointments').add({
           'doctorOrClinicName': doctorOrClinicNameController.text,
           'purposeOfVisit': purposeOfVisitController.text,
           'location': locationController.text,
-          'appointmentDate': selectedDate,
-          'appointmentTime': selectedTime,
+          'appointmentDateTime': Timestamp.fromDate(
+            combinedDateTime,
+          ), // Store as Timestamp
+          'userId':
+              userId, // Save the user's ID to associate the appointment with the user
         });
 
         // Successfully added the appointment
@@ -55,6 +77,39 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
       }
     }
+  }
+
+  // Function to display time picker
+  void _selectTime() {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: Text('Select Appointment Time'),
+          message: CupertinoPicker(
+            itemExtent: 32,
+            scrollController: FixedExtentScrollController(initialItem: 8),
+            onSelectedItemChanged: (index) {
+              setState(() {
+                selectedTime =
+                    '${index + 6}:00'; // Selecting from 8 AM to 11 AM
+              });
+            },
+            children: List.generate(10, (index) {
+              return Center(child: Text('${index + 6}:00'));
+            }),
+          ),
+          actions: [
+            CupertinoActionSheetAction(
+              child: Text('Done'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -198,7 +253,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
               ),
             ),
 
-            // Appointment Time Picker
+            // Appointment Time Picker (using scroll picker)
             Container(
               padding: EdgeInsets.all(12.0),
               margin: EdgeInsets.only(top: 12.0),
@@ -212,24 +267,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   Icon(Icons.access_time, color: AppColors.primary),
                   SizedBox(width: 12),
                   Expanded(
-                    child: DropdownButton<String>(
-                      value: selectedTime,
-                      items:
-                          ['08:00', '09:00', '10:00', '11:00']
-                              .map(
-                                (value) => DropdownMenuItem(
-                                  child: Text(value),
-                                  value: value,
-                                ),
-                              )
-                              .toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          selectedTime = newValue!;
-                        });
-                      },
-                      isExpanded: true,
-                      underline: Container(),
+                    child: GestureDetector(
+                      onTap: _selectTime,
+                      child: Text(selectedTime, style: TextStyle(fontSize: 18)),
                     ),
                   ),
                 ],

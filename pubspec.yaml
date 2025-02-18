@@ -56,6 +56,9 @@ dependencies:
   permission_handler: ^11.3.1
   cached_network_image: ^3.4.1
   sqflite: ^2.0.0+4
+  speech_to_text: ^7.0.0
+  flutter_tts: ^4.2.2
+  csv: ^6.0.0
 
 dev_dependencies:
   flutter_test:

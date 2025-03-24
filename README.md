@@ -1,10 +1,11 @@
-<<<<<<< HEAD
-Based on the provided information and context, here’s a concise **GitHub project description** and **README file** that can be used for your project:
+Here’s the updated **GitHub project description** and **README file** based on your requirements:
+
+---
 
 ### GitHub Project Description:
 ---
 
-A Flutter-based mobile app that helps manage chronic illnesses with features like symptom tracking, medication reminders, a community support hub, and real-time location services powered by Google Maps API. It integrates Firebase for user authentication, Firestore for data management, and utilizes the ChatGPT API for health-related guidance.
+A Flutter-based mobile app designed to help manage chronic illnesses. Key features include symptom tracking using a specialized fine-tuned medical AI, medication reminders, appointment management, medical history tracking, and a community support hub. The app integrates Google Maps API for healthcare facility location services and utilizes the Gemini API for medical text-to-speech and speech-to-text capabilities.
 
 ---
 
@@ -15,25 +16,25 @@ A Flutter-based mobile app that helps manage chronic illnesses with features lik
 
 ## Overview
 
-**Grape** is a mobile app designed to empower users in managing chronic illnesses. With features such as symptom tracking, medication reminders, personalized health recommendations, and community support, Grape provides a holistic approach to chronic illness management. The app integrates Firebase for backend services, including user authentication and real-time data syncing. Additionally, it leverages the Google Maps API for healthcare facility location services and the ChatGPT API for personalized health advice.
+**Grape** is a mobile app designed to empower users in managing chronic illnesses. With features such as symptom tracking using a specialized fine-tuned medical AI, medication reminders, personalized health recommendations, appointment management, and medical history tracking, Grape provides a comprehensive approach to chronic illness management. The app integrates Firebase for backend services, including user authentication and real-time data syncing. Additionally, it leverages the Google Maps API for healthcare facility location services and the Gemini API for medical text-to-speech and speech-to-text functionality.
 
 ## Features
 
-- **Symptom Tracker**: Utilizes machine learning to predict flare-ups or remission periods based on user input.
-- **Medication Reminders**: Timely notifications for medication intake.
+- **Symptom Tracker**: Powered by a specialized fine-tuned medical AI, the symptom tracker predicts flare-ups or remission periods based on user input and historical data.
+- **Medication Reminders**: Provides timely notifications for medication intake.
+- **Appointment Manager**: Organizes and tracks medical appointments, including reminders.
+- **Medical History Manager**: Keeps a detailed record of users' medical history for easy reference and sharing with healthcare providers.
 - **Google Maps API Integration**: Provides real-time location tracking for healthcare facilities, pharmacies, and rest stops.
 - **Community Support**: Connect with other users managing similar health conditions.
-- **Recipes Hub**: Offers healthy, condition-friendly recipes.
-- **SOS Feature**: Immediate emergency alerts with location and health data to contacts and hospitals.
-- **ChatGPT Integration**: Get personalized health tips and recommendations based on your symptoms.
+- **Gemini API Integration**: Features a chatbot with medical expertise, offering text-to-speech and speech-to-text capabilities to assist users in managing their health.
 
 ## Tech Stack
 
 - **Flutter**: A cross-platform framework for building natively compiled applications.
 - **Firebase**: Powers user authentication, real-time data syncing, and push notifications.
 - **Google Maps API**: Real-time location services.
-- **ChatGPT API**: Provides AI-powered health advice and recommendations.
-- **Machine Learning**: Used for predicting symptom trends.
+- **Gemini API**: Provides medical-specific text-to-speech and speech-to-text functionality.
+- **Machine Learning**: Used for predicting symptom trends based on a fine-tuned medical AI.
 
 ## Installation
 
@@ -71,9 +72,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Firebase** for backend services and real-time data management.
 - **Google Maps API** for location services.
-- **ChatGPT API** for personalized health guidance.
+- **Gemini API** for medical-specific text-to-speech and speech-to-text functionality.
 - **Flutter** for building a cross-platform app.
 
 ---
 
-This **README** provides an overview of your project, highlights its key features, and includes setup instructions for contributors and users. Feel free to adjust the content based on your project’s specifics!
+This **README** now reflects the updated features, such as the use of the Gemini API, and includes the new appointment manager and medical history manager. Feel free to further customize it based on additional features or specifics of your project!

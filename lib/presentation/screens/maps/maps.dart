@@ -25,7 +25,7 @@ class _MapViewState extends State<MapView> {
   bool _locationFetched = false;
   final Dio dio = Dio();
   final String googleApiKey =
-      "AIzaSyAK7DuoysuxbXz8nQx6zfsijyoNSok7FK8"; // Add your API key here
+  Key_Here; // Add your API key here
   late Position _userPosition;
 
   // Variables to store nearest pharmacy and hospital

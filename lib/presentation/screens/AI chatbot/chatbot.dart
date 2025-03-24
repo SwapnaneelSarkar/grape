@@ -93,7 +93,7 @@ class _SpeechToTextChatPageState extends State<SpeechToTextChatPage> {
   // Call Gemini API with the user's transcribed message
   Future<void> _sendMessageToApi(String message) async {
     var apiUrl =
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDs1Oe5TiVZAuCfmFVFHbuxLAx6BR67uZg";
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GeminiAPIKey}";
     var headers = {'Content-Type': 'application/json'};
 
     var body = json.encode({

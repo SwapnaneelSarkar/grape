@@ -1,11 +1,7 @@
-Here’s the updated **GitHub project description** and **README file** based on your requirements:
-
----
-
 ### GitHub Project Description:
 ---
 
-A Flutter-based mobile app designed to help manage chronic illnesses. Key features include symptom tracking using a specialized fine-tuned medical AI, medication reminders, appointment management, medical history tracking, and a community support hub. The app integrates Google Maps API for healthcare facility location services and utilizes the Gemini API for medical text-to-speech and speech-to-text capabilities.
+A Flutter-based mobile app designed to help manage chronic illnesses. Key features include symptom tracking using a specialized fine-tuned medical AI, medication reminders, appointment management, medical history tracking, community support with group chats, and a healthcare location finder. The app integrates Google Maps API for healthcare facility location services and utilizes the Gemini API for medical text-to-speech and speech-to-text capabilities.
 
 ---
 
@@ -16,7 +12,7 @@ A Flutter-based mobile app designed to help manage chronic illnesses. Key featur
 
 ## Overview
 
-**Grape** is a mobile app designed to empower users in managing chronic illnesses. With features such as symptom tracking using a specialized fine-tuned medical AI, medication reminders, personalized health recommendations, appointment management, and medical history tracking, Grape provides a comprehensive approach to chronic illness management. The app integrates Firebase for backend services, including user authentication and real-time data syncing. Additionally, it leverages the Google Maps API for healthcare facility location services and the Gemini API for medical text-to-speech and speech-to-text functionality.
+**Grape** is a mobile app designed to empower users in managing chronic illnesses. With features such as symptom tracking using a specialized fine-tuned medical AI, medication reminders, personalized health recommendations, appointment management, medical history tracking, and a community support hub, Grape provides a comprehensive approach to chronic illness management. The app integrates Firebase for backend services, including user authentication and real-time data syncing. Additionally, it leverages the Google Maps API for healthcare facility location services and the Gemini API for medical text-to-speech and speech-to-text functionality.
 
 ## Features
 
@@ -25,7 +21,7 @@ A Flutter-based mobile app designed to help manage chronic illnesses. Key featur
 - **Appointment Manager**: Organizes and tracks medical appointments, including reminders.
 - **Medical History Manager**: Keeps a detailed record of users' medical history for easy reference and sharing with healthcare providers.
 - **Google Maps API Integration**: Provides real-time location tracking for healthcare facilities, pharmacies, and rest stops.
-- **Community Support**: Connect with other users managing similar health conditions.
+- **Community Support**: Allows users to join group chats with others managing similar health conditions, fostering a supportive community for discussing illnesses and recovery. Chat functionality is integrated through real-time messaging.
 - **Gemini API Integration**: Features a chatbot with medical expertise, offering text-to-speech and speech-to-text capabilities to assist users in managing their health.
 
 ## Tech Stack
@@ -35,6 +31,7 @@ A Flutter-based mobile app designed to help manage chronic illnesses. Key featur
 - **Google Maps API**: Real-time location services.
 - **Gemini API**: Provides medical-specific text-to-speech and speech-to-text functionality.
 - **Machine Learning**: Used for predicting symptom trends based on a fine-tuned medical AI.
+- **Realtime Chat (Firebase)**: For creating and managing group chats in the community support section.
 
 ## Installation
 
@@ -60,21 +57,15 @@ A Flutter-based mobile app designed to help manage chronic illnesses. Key featur
    flutter run
    ```
 
-## Contributing
 
-We welcome contributions! Please fork this repository and submit a pull request with any enhancements or bug fixes. Ensure that your changes follow the existing code style and add tests where appropriate.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- **Firebase** for backend services and real-time data management.
+- **Firebase** for backend services, real-time messaging, and push notifications.
 - **Google Maps API** for location services.
 - **Gemini API** for medical-specific text-to-speech and speech-to-text functionality.
 - **Flutter** for building a cross-platform app.
 
 ---
 
-This **README** now reflects the updated features, such as the use of the Gemini API, and includes the new appointment manager and medical history manager. Feel free to further customize it based on additional features or specifics of your project!
+The **Community Support** feature now includes real-time group chats where users can engage in discussions about their illnesses and recovery. This feature fosters a supportive environment for sharing experiences and advice.

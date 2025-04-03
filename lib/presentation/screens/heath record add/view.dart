@@ -414,24 +414,50 @@ class _HealthRecordPageState extends State<HealthRecordPage> {
                     'operation_date': _operationDateController.text,
                     'blood_tests': _bloodTestController.text,
                     'triggers': selectedTriggers,
+                    // If no image uploaded, file_urls will be an empty list
                     'file_urls':
                         uploadedFileUrl != null ? [uploadedFileUrl!] : [],
                   };
 
                   print("Record data to be submitted: $recordData");
 
-                  // Upload the image to Firebase Storage and get the URL
-                  String? imageUrl = await _uploadFileToFirebase(
-                    uploadedFileUrl!,
-                  );
+                  try {
+                    // Only upload the image if one has been selected
+                    if (uploadedFileUrl != null &&
+                        uploadedFileUrl!.isNotEmpty) {
+                      // Upload the image to Firebase Storage and get the URL
+                      String? imageUrl = await _uploadFileToFirebase(
+                        uploadedFileUrl!,
+                      );
 
-                  // If an image URL is returned, add it to the record data
-                  if (imageUrl != null) {
-                    recordData['file_urls'] = [imageUrl];
+                      // If an image URL is returned, add it to the record data
+                      if (imageUrl != null) {
+                        recordData['file_urls'] = [imageUrl];
+                      }
+                    }
+
+                    // Submit the record data to Firestore
+                    await _submitHealthRecord(recordData);
+
+                    // Show success message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Record submitted successfully!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+
+                    // Pop the current screen to go back
+                    Navigator.pop(context);
+                  } catch (e) {
+                    // Show error message if something goes wrong
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error submitting record: $e'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                   }
-
-                  // Submit the record data to Firestore
-                  await _submitHealthRecord(recordData);
                 },
                 child: Text('Submit'),
                 style: ElevatedButton.styleFrom(

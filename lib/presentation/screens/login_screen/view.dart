@@ -73,7 +73,7 @@ class _LoginViewState extends State<LoginView> {
                       SnackBar(content: Text('Welcome ${state.name}!')),
                     );
                     Future.microtask(() {
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pushReplacementNamed(context, '/home');
                     });
                   } else if (state is LoginFailure) {
                     print("❌ Login Failure: ${state.error}");
@@ -154,7 +154,10 @@ class _LoginViewState extends State<LoginView> {
                                   )
                                   : const Text(
                                     "Login",
-                                    style: TextStyle(fontSize: 18),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                    ),
                                   ),
                         ),
                       ],

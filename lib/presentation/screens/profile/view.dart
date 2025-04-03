@@ -6,8 +6,12 @@ import '../add_reminder/view.dart';
 import '../bottm nav bar/view.dart';
 import '../edit profile/view.dart';
 import '../heath record add/view.dart';
+import '../med record view/view.dart';
+import '../medicines/view.dart';
 import '../privacy policy/view.dart';
 import '../show_meds/view.dart';
+import '../show_reminder/showReminders_view.dart';
+import '../symptom tracker/view.dart';
 import '../terms and conditions/view.dart';
 import 'bloc.dart';
 import 'event.dart';
@@ -32,22 +36,34 @@ class _ProfilePageState extends State<ProfilePage> {
   // Navigate to another page on section tap
   void _navigateToSection(String section) {
     switch (section) {
+      case 'Symptom Predictor':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HealthSymptomView()),
+        );
+        break;
       case 'My Appointments':
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => AppointmentShowPage()),
         );
         break;
-      case 'My Meds':
+      case 'My Medicines Reminders':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const MedicineReminderView()),
+          MaterialPageRoute(builder: (context) => ViewRemindersPage()),
+        );
+        break;
+      case 'Add Medications':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MedicationPage()),
         );
         break;
       case 'Health Records':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HealthRecordPage()),
+          MaterialPageRoute(builder: (context) => MedicalRecordViewPage()),
         );
         break;
       case 'Edit Profile':
@@ -215,6 +231,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       _buildShimmerTile(),
                       _buildShimmerTile(),
                       _buildShimmerTile(),
+                      _buildShimmerTile(),
 
                       // Log out button at the bottom, centered
                       const SizedBox(height: 40),
@@ -308,11 +325,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       // Sections below the profile card
                       const SizedBox(height: 20),
+                      _buildSectionTile('Symptom Predictor'),
                       _buildSectionTile('My Appointments'),
-                      _buildSectionTile('My Meds'),
+                      _buildSectionTile('My Medicines Reminders'),
+                      _buildSectionTile('Add Medications'),
                       _buildSectionTile('Health Records'),
                       _buildSectionTile('Edit Profile'),
-                      _buildSectionTile('Feedback'),
                       _buildSectionTile('Terms and Conditions'),
                       _buildSectionTile('Privacy Policy'),
 

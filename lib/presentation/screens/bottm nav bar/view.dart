@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // For hardware back button interception
 import '../../color_constant/color_constant.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -19,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
         break;
       case 3:
         Navigator.pushReplacementNamed(context, '/maps');
-
+        break;
       case 4:
         Navigator.pushReplacementNamed(context, '/profile');
         break;

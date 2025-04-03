@@ -106,14 +106,19 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
           icon: Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 100.0),
-          child: Text(
-            widget.community.name,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white, // Custom button text color
+        title: Align(
+          alignment: Alignment.center, // Align the title in the center
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+            ), // Optional: Adds space around the title
+            child: Text(
+              widget.community.name,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white, // Custom button text color
+              ),
             ),
           ),
         ),
@@ -126,6 +131,7 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
           ),
         ),
       ),
+
       body: SingleChildScrollView(
         // Wrapping the body in SingleChildScrollView for scrollability
         child: Padding(

@@ -160,7 +160,7 @@ class _HealthSymptomViewState extends State<HealthSymptomView>
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Symptom Tracker   ",
+                  "Symptom Predictor   ",
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,

@@ -93,6 +93,7 @@ flutter:
     - assets/community.png
     - assets/error.png
     - assets/logo.png
+    - assets/splash.png
 
 
   # The following line ensures that the Material Icons font is

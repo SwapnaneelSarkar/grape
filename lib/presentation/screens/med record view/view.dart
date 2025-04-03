@@ -41,7 +41,6 @@ class _MedicalRecordViewPageState extends State<MedicalRecordViewPage> {
       await Permission.storage.request();
     }
 
-    // After ensuring permissions
     var permissionStatus = await Permission.storage.request();
     if (permissionStatus.isGranted) {
       try {
@@ -147,6 +146,9 @@ class _MedicalRecordViewPageState extends State<MedicalRecordViewPage> {
                       return Center(child: Text('Error loading image'));
                     },
                   ),
+                // If no image, show a placeholder or text
+                if (data['file_urls'] == null || data['file_urls'].isEmpty)
+                  Center(child: Text('No image available')),
                 SizedBox(height: 20),
                 // Add a download button below the image
                 ElevatedButton(
@@ -187,7 +189,6 @@ class _MedicalRecordViewPageState extends State<MedicalRecordViewPage> {
             onPressed: () => Navigator.pop(context),
           ),
           title: Center(
-            // This centers the title
             child: Column(
               mainAxisAlignment:
                   MainAxisAlignment
@@ -276,6 +277,14 @@ class _MedicalRecordViewPageState extends State<MedicalRecordViewPage> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to the Add Appointment page
+          Navigator.pushNamed(context, '/healthView');
+        },
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: AppColors.primary,
       ),
     );
   }

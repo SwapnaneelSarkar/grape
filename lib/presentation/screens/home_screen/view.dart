@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,7 +59,7 @@ class NewsService {
     try {
       final response = await http.get(
         Uri.parse(
-          '$apiUrl?q=medicine+health+medical&from=2025-01-20&sortBy=publishedAt&apiKey=$apiKey',
+          '$apiUrl?q=medicine+health+medical&from=2025-03-27&sortBy=publishedAt&apiKey=$apiKey',
         ),
       );
 
@@ -113,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final String medication = "No Medication to take today";
   final String appointmentTitle = "Biologic Infusion";
   final String appointmentTime = "09:00:00 - 13:00:00";
-  final String appointmentDate = "15 February";
+  final String appointmentDate = "20 February";
   final String appointmentDoctor = "Dr. Ramesh Hos";
 
   @override
@@ -179,77 +181,112 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          // ClipPath with WaveClipper for the top bar
-          ClipPath(
-            clipper: WaveClipper(),
-            child: Container(height: 160, color: AppColors.primary),
-          ),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        // Exit the app when the back button is pressed
+        return await showDialog(
+              context: context,
+              builder:
+                  (BuildContext context) => AlertDialog(
+                    title: Text('Exit'),
+                    content: Text('Do you want to exit the app?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed:
+                            () => Navigator.of(
+                              context,
+                            ).pop(false), // Dismiss dialog
+                        child: Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () => SystemNavigator.pop(), // Exit the app
+                        child: Text('Yes'),
+                      ),
+                    ],
+                  ),
+            ) ??
+            false; // Return the result of the dialog
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            // ClipPath with WaveClipper for the top bar
+            ClipPath(
+              clipper: WaveClipper(),
+              child: Container(height: 160, color: AppColors.primary),
+            ),
+            Scaffold(
               backgroundColor: Colors.transparent,
-              elevation: 0.0,
-              leading: const Icon(Icons.home, color: Colors.white),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Home Screen',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0.0,
+                leading: const Icon(Icons.home, color: Colors.white),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Home Screen',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  // Removed `const` to allow dynamic user name
-                  Text(
-                    'Welcome, $_userName', // Dynamically displaying username
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 220, 220, 220),
-                      fontSize: 14,
+                    // Removed `const` to allow dynamic user name
+                    Text(
+                      'Welcome, $_userName', // Dynamically displaying username
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 220, 220, 220),
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 5),
-                  const Text(
-                    'Welcome to Grape!',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Welcome to Grape!',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 30),
+                    const SizedBox(height: 30),
 
-                  // Today's Medication Section
-                  _buildMedicationSection(),
+                    // Today's Medication Section
+                    _buildMedicationSection(),
 
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                  // Upcoming Appointments Section
-                  _buildUpcomingAppointmentsSection(),
+                    // Upcoming Appointments Section
+                    _buildUpcomingAppointmentsSection(),
 
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                  // Latest News Feed Section
-                  _buildNewsFeedSection(),
-                ],
+                    // Latest News Feed Section
+                    _buildNewsFeedSection(),
+                  ],
+                ),
               ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  // Navigate to the Add Appointment page
+                  Navigator.pushNamed(context, '/tracker');
+                },
+                child: Icon(Icons.track_changes_rounded, color: Colors.white),
+                backgroundColor: AppColors.primary,
+              ),
+              bottomNavigationBar: BottomNavBar(currentIndex: _currentIndex),
             ),
-            bottomNavigationBar: BottomNavBar(currentIndex: _currentIndex),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -319,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   elevation: 5,
                 ),
                 onPressed: () {
-                  // Add action to add medication
+                  Navigator.pushNamed(context, '/reminder');
                 },
                 child: const Text(
                   "Add a medication",
@@ -338,78 +375,120 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildUpcomingAppointmentsSection() {
-    return Center(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.9, // Wider layout
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 12,
-              offset: Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title Row with Icon
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Icon(
-                  Icons.event_note,
-                  color: AppColors.primary,
-                ), // Calendar Icon
-                SizedBox(width: 10),
-                Text(
-                  "Upcoming Appointments",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
+    return StreamBuilder<QuerySnapshot>(
+      stream:
+          FirebaseFirestore.instance
+              .collection('appointments')
+              .where(
+                'userId',
+                isEqualTo: FirebaseAuth.instance.currentUser?.uid,
+              )
+              .orderBy(
+                'appointmentDateTime',
+                descending: true,
+              ) // Sort by most recent
+              .limit(1) // Only fetch the most recent appointment
+              .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(child: Text('No upcoming appointments.'));
+        }
+
+        // Get the most recent appointment data
+        var appointmentData =
+            snapshot.data!.docs.first.data() as Map<String, dynamic>;
+
+        // Format the date (e.g., "01 Jan, 2025")
+        var appointmentDate =
+            (appointmentData['appointmentDateTime'] as Timestamp)
+                .toDate()
+                .toLocal();
+        var formattedDate = DateFormat('dd MMM, yyyy').format(appointmentDate);
+
+        // Extract details for the appointment
+        String appointmentTime =
+            "${appointmentDate.hour}:${appointmentDate.minute < 10 ? '0' + appointmentDate.minute.toString() : appointmentDate.minute}";
+        String appointmentDoctor =
+            appointmentData['doctorOrClinicName'] ?? 'N/A';
+        String appointmentTitle = appointmentData['purposeOfVisit'] ?? 'N/A';
+
+        return Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9, // Wider layout
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 12,
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-
-            // Appointment Details in a Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Color(0xFFE9F2FF), // Light blue background for the card
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Date Row
-                  Row(
-                    children: [
-                      Text(
-                        appointmentDate.split(" ")[0], // "15"
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title Row with Icon
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Icon(
+                      Icons.event_note,
+                      color: AppColors.primary,
+                    ), // Calendar Icon
+                    SizedBox(width: 10),
+                    Text(
+                      "Upcoming Appointments",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
-                      const SizedBox(width: 8),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Appointment Details in a Card
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Color(
+                      0xFFE9F2FF,
+                    ), // Light blue background for the card
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Date Row
+                      Row(
                         children: [
                           Text(
-                            appointmentDate.split(" ")[1], // "February"
+                            formattedDate, // "01 Jan, 2025"
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black54,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
                             ),
                           ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Purpose Row
+                      Row(
+                        children: [
                           Text(
                             appointmentTitle,
                             style: const TextStyle(
@@ -420,91 +499,93 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      const Spacer(), // Pushes the icon to the right
-                      Icon(Icons.medical_services, color: AppColors.primary),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
+                      const SizedBox(height: 12),
 
-                  // Time and Doctor Row
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.access_time,
-                        size: 18,
-                        color: Colors.black54,
+                      // Time and Doctor/Clinic Name Row
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.access_time,
+                            size: 18,
+                            color: Colors.black54,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            appointmentTime,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        appointmentTime,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black54,
-                        ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.person,
+                            size: 18,
+                            color: Colors.black54,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            appointmentDoctor,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Icon(Icons.person, size: 18, color: Colors.black54),
-                      const SizedBox(width: 6),
-                      Text(
-                        appointmentDoctor,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Centered "Add Appointment" Button
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white, // White button
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 40,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(
-                      color: AppColors.primary,
-                      width: 2,
-                    ), // Outline
-                  ),
-                  elevation: 5,
                 ),
-                onPressed: () {
-                  // Add action to add an appointment
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.add, color: AppColors.primary),
-                    SizedBox(width: 8),
-                    Text(
-                      "Add new Appointment",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primary,
+                const SizedBox(height: 20),
+
+                // Centered "Add Appointment" Button
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white, // White button
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 40,
                       ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(
+                          color: AppColors.primary,
+                          width: 2,
+                        ), // Outline
+                      ),
+                      elevation: 5,
                     ),
-                  ],
+                    onPressed: () {
+                      // Add action to add an appointment
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.add, color: AppColors.primary),
+                        SizedBox(width: 8),
+                        Text(
+                          "Add new Appointment",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -626,16 +707,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
                         },
                         errorBuilder: (context, error, stackTrace) {
-                          return Image.network(
-                            'assets/error.png/150',
+                          return Image.asset(
+                            'assets/error.png',
                             width: 120,
                             height: 100,
                             fit: BoxFit.cover,
                           );
                         },
                       )
-                      : Image.network(
-                        'assets/error.png/150',
+                      : Image.asset(
+                        'assets/error.png',
                         width: 120,
                         height: 100,
                         fit: BoxFit.cover,

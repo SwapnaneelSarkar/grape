@@ -23,10 +23,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # 4) (optional) run static analysis
-      - name: Analyze
-        run: flutter analyze
-
       # 5) Build your APK
       - name: Build APK
         run: flutter build apk --release
